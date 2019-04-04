@@ -140,7 +140,10 @@ function main() {
   lastVal(SLL);
   // reverseList(SLL);
   console.log(display(SLL));
-  console.log(thirdFromEnd(SLL));
+  thirdFromEnd(SLL);
+  middleVal(SLL);
+
+  console.log(cycle(SLL));
 }
 
 main();
@@ -200,13 +203,13 @@ function lastVal(linkedList) {
   return currentNode.value;
 }
 
-// WhatDoesThisProgramDo() is a function that replaces the first instance of a duplicate with the next value in the list. 
+// WhatDoesThisProgramDo() is a function that replaces the first instance of a duplicate with the next value in the list.
 
-function reverseList(ll){
+function reverseList(ll) {
   let currentNode = ll.head;
   let previousNode = null;
 
-  while (currentNode.next !== null){
+  while (currentNode.next !== null) {
     let tempPrevious = previousNode;
     let tempCurrent = currentNode;
     previousNode = currentNode;
@@ -218,15 +221,48 @@ function reverseList(ll){
   return ll;
 }
 
-function thirdFromEnd(ll){
+function thirdFromEnd(ll) {
   let currentNode = ll.head;
   let previousNode = null;
   let twoBack = null;
 
-  while (currentNode.next !== null){  
+  while (currentNode.next !== null) {
     twoBack = previousNode;
     previousNode = currentNode;
     currentNode = currentNode.next;
   }
   return twoBack.value;
+}
+
+function middleVal(linkedList) {
+  let currentNode = linkedList.head;
+  let count = 0;
+  let middleVar = null;
+  while (currentNode.next !== null) {
+    currentNode = currentNode.next;
+    count++;
+  }
+  count++;
+  middleVar = count / 2;
+  currentNode = linkedList.head;
+  while (middleVar > 0) {
+    currentNode = currentNode.next;
+    middleVar--;
+  }
+  return currentNode.value;
+}
+
+function cycle(CycleList) {
+  let usedVals = [];
+  let currentNode = CycleList.head;
+  while (currentNode.next !== null) {
+    usedVals.push(currentNode.value);
+    for (let i = 0; i < usedVals.length; i++) {
+      if (usedVals[i] === currentNode.next.value) {
+        return true;
+      }
+    }
+    currentNode = currentNode.next;
+  }
+  return false;
 }
