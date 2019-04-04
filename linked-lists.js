@@ -135,20 +135,25 @@ function main() {
   SLL.remove('Tauhida');
   display(SLL);
   size(SLL);
-  ifExists(SLL);
+  isEmpty(SLL);
   findPrevious(SLL, 'Helo');
   lastVal(SLL);
+  // reverseList(SLL);
+  console.log(display(SLL));
+  console.log(thirdFromEnd(SLL));
 }
 
 main();
 
 function display(linkedList) {
   let currentNode = linkedList.head;
+  let result = [];
   while (currentNode.next !== null) {
-    console.log(currentNode.value);
+    result.push(currentNode.value);
     currentNode = currentNode.next;
   }
-  console.log(currentNode.value);
+  result.push(currentNode.value);
+  return result;
 }
 
 function size(linkedList) {
@@ -159,19 +164,19 @@ function size(linkedList) {
     count++;
   }
   count++;
-  console.log(count);
+  return count;
 }
 
-function ifExists(linkedList) {
+function isEmpty(linkedList) {
   if (!linkedList.head) {
-    console.log('no list exists');
+    return true;
   }
-  console.log('there is a list');
+  return false;
 }
 
 function findPrevious(linkedList, str) {
   if (!linkedList.head) {
-    console.log('value doesnt exist');
+    return 'value doesnt exist';
   }
   let currNode = linkedList.head;
   let previousNode = linkedList.head;
@@ -182,10 +187,9 @@ function findPrevious(linkedList, str) {
     currNode = currNode.next;
   }
   if (currNode === null) {
-    console.log('Target not found');
-    return;
+    return 'Target not found';
   }
-  console.log(previousNode.value);
+  return previousNode.value;
 }
 
 function lastVal(linkedList) {
@@ -193,7 +197,36 @@ function lastVal(linkedList) {
   while (currentNode.next !== null) {
     currentNode = currentNode.next;
   }
-  console.log(currentNode.value);
+  return currentNode.value;
 }
 
-// WhatDoesThisProgramDo() is a function that replaces duplicates with the next value
+// WhatDoesThisProgramDo() is a function that replaces the first instance of a duplicate with the next value in the list. 
+
+function reverseList(ll){
+  let currentNode = ll.head;
+  let previousNode = null;
+
+  while (currentNode.next !== null){
+    let tempPrevious = previousNode;
+    let tempCurrent = currentNode;
+    previousNode = currentNode;
+    currentNode = currentNode.next;
+    tempCurrent.next = tempPrevious;
+  }
+  currentNode.next = previousNode;
+  ll.head = currentNode;
+  return ll;
+}
+
+function thirdFromEnd(ll){
+  let currentNode = ll.head;
+  let previousNode = null;
+  let twoBack = null;
+
+  while (currentNode.next !== null){  
+    twoBack = previousNode;
+    previousNode = currentNode;
+    currentNode = currentNode.next;
+  }
+  return twoBack.value;
+}
