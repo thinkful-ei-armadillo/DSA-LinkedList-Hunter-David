@@ -1,9 +1,10 @@
 'use strict';
 
 class _Node {
-  constructor(value, next) {
+  constructor(value, next, prev) {
     this.value = value;
     this.next = next;
+    this.prev = prev;
   }
 }
 
@@ -146,7 +147,6 @@ function main() {
   console.log(cycle(SLL));
 }
 
-main();
 
 function display(linkedList) {
   let currentNode = linkedList.head;
@@ -266,3 +266,171 @@ function cycle(CycleList) {
   }
   return false;
 }
+
+
+class doublyLinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
+  insertFirst(item) {
+    const insertedNode = new _Node(item, this.head, null);
+    if(!this.head){
+      this.head = insertedNode;
+      this.tail = insertedNode;
+    } else {
+      this.head.prev = insertedNode;
+      this.head = insertedNode;
+    }
+  }
+  
+  insertLast(item) {
+    if (this.head === null) {
+      this.insertFirst(item);
+    } else {
+      const insertedNode = new _Node(item, null, this.tail);
+      this.tail.next = insertedNode;
+      this.tail = insertedNode;
+    }
+  }
+  find(item) {
+    // Start at the head
+    let currNode = this.head;
+    // If the list is empty
+    if (!this.head) {
+      return null;
+    }
+    // Check for the item
+    while (currNode.value !== item) {
+      /* Return null if it's the end of the list 
+         and the item is not on the list */
+      if (currNode.next === null) {
+        return null;
+      } else {
+        // Otherwise, keep looking
+        currNode = currNode.next;
+      }
+    }
+    // Found it
+    return currNode;
+  }
+  remove(item) {
+    // If the list is empty
+    if (!this.head) {
+      return null;
+    }
+    // If the node to be removed is head, make the next node head
+    if (this.head.value === item) {
+      this.head = this.head.next;
+      return;
+    }
+    // If the node to be removed is tail, make the previos node tail
+    if (this.tail.value === item) {
+      this.tail = this.tail.prev;
+      return;
+    }
+    // Start at the head
+    let currNode = this.head;
+    // Keep track of previous
+    let previousNode = this.head;
+
+    while (currNode !== null && currNode.value !== item) {
+      // Save the previous node
+      previousNode = currNode;
+      currNode = currNode.next;
+    }
+    if (currNode === null) {
+      console.log('Item not found');
+      return;
+    }
+    let nextNode = currNode.next;
+    previousNode.next = currNode.next;
+    nextNode.prev = previousNode;
+  }
+  insertBefore(newValue, beforeTarget) {
+    if (!this.head) {
+      this.insertFirst(newValue);
+    }
+    let currNode = this.head;
+    let previousNode = this.head;
+
+    while (currNode !== null && currNode.value !== beforeTarget) {
+      // Save the previous node
+      previousNode = currNode;
+      currNode = currNode.next;
+    }
+    if (currNode === null) {
+      console.log('Target not found');
+      return;
+    }
+    const insertedNode = new _Node(newValue, currNode, previousNode);
+    previousNode.next = insertedNode;
+    currNode.prev = insertedNode;
+  }
+  insertAfter(newValue, afterTarget) {
+    if (!this.head) {
+      this.insertFirst(newValue);
+    }
+    let currNode = this.head;
+    while (currNode.next !== null && currNode.value !== afterTarget) {
+      currNode = currNode.next;
+    }
+    if (currNode.next === null) {
+      console.log('Target not found');
+      return;
+    }
+    let newNode = new _Node(newValue, currNode.next, currNode);
+    let oldNextNode = currNode.next;
+    currNode.next = newNode;
+    oldNextNode.prev = newNode;
+  }
+  insertAt(newValue, position) {
+    let count = 1;
+    let currNode = this.head;
+    while (count < position) {
+      if (currNode.next === null) {
+        console.log('Could not find that position');
+        return;
+      }
+      count++;
+      currNode = currNode.next;
+    }
+    const insertedNode = new _Node(newValue, currNode.next, currNode);
+    let oldNextNode = currNode.next;
+    currNode.next = insertedNode;
+    oldNextNode.prev = insertedNode;
+  }
+}
+
+function mainDLL(){
+  let DLL = new doublyLinkedList();
+  DLL.insertLast('Aquaria');
+  DLL.insertLast('Caprica');
+  DLL.insertLast('Gemenon');
+  DLL.insertLast('Picon');
+  DLL.insertLast('Sagittaron');
+  DLL.insertLast('Tauron');
+  DLL.remove('Picon');  
+  display(DLL);
+  reverseDLL(DLL);
+  display(DLL);
+}
+
+function reverseDLL(dll){
+  let currentNode = dll.head;
+  let tempNode = null;
+  dll.tail = currentNode;
+
+  while(currentNode !== null){
+    tempNode = currentNode.prev;
+    currentNode.prev = currentNode.next;
+    currentNode.next = tempNode;
+    currentNode = currentNode.prev;
+  }
+
+  if(tempNode !== null){
+    dll.head = tempNode.prev;
+  }
+}
+
+mainDLL();
